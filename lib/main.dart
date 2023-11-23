@@ -1,6 +1,7 @@
 import 'package:aulerta_final/pages/onboarding_&_home/intro_screen.dart';
 import 'package:aulerta_final/pages/pills/pages/cadastro/new_entry_bloc.dart';
 import 'package:aulerta_final/pages/task/db/db.dart';
+import 'package:aulerta_final/service/provider.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get_navigation/src/root/get_material_app.dart';
 import 'package:get_storage/get_storage.dart';
@@ -12,7 +13,10 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await DBHelper.initDb();
   await GetStorage.init();
-  runApp(const MyApp());
+  runApp(MultiProvider(
+      providers: providers,
+      child: const MyApp(),
+    ));
 }
 
 class MyApp extends StatefulWidget {

@@ -1,10 +1,15 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
+import 'package:aulerta_final/controller/Medicine/createMedicineController.dart';
+import 'package:aulerta_final/controller/Medicine/showMedicineController.dart';
+import 'package:aulerta_final/controller/login/login_controller.dart';
 import 'package:aulerta_final/pages/pills/commom/convert_time.dart';
 import 'package:aulerta_final/pages/pills/constants.dart';
 import 'package:aulerta_final/pages/pills/models/medicine_type.dart';
 import 'package:aulerta_final/pages/pills/pages/cadastro/new_entry_bloc.dart';
+import 'package:aulerta_final/pages/pills/pages/home.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:get/get.dart';
 import 'package:sizer/sizer.dart';
 import 'package:provider/provider.dart';
 
@@ -19,15 +24,17 @@ class _NewEntryPageState extends State<NewEntryPage> {
   late TextEditingController nameController;
   late TextEditingController dosageController;
 
-  late NewEntryBloc _newEntryBloc;
+  // late NewEntryBloc _newEntryBloc;
   late GlobalKey<ScaffoldState> _scaffoldKey;
+  final _intervals = [4, 6, 8, 12, 24];
+  var _selected = 0;
 
   @override
   void dispose() {
     super.dispose();
     nameController.dispose();
     dosageController.dispose();
-    _newEntryBloc.dispose();
+    // _newEntryBloc.dispose();
   }
 
   @override
@@ -35,144 +42,222 @@ class _NewEntryPageState extends State<NewEntryPage> {
     super.initState();
     nameController = TextEditingController();
     dosageController = TextEditingController();
-    _newEntryBloc = NewEntryBloc();
+    // _newEntryBloc = NewEntryBloc();
     _scaffoldKey = GlobalKey<ScaffoldState>();
   }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      key: _scaffoldKey,
-      resizeToAvoidBottomInset: false,
-      appBar: AppBar(
-        centerTitle: true,
-        title: const Text(
-          "Nova Medicação",
-        ),
-      ),
-      body: Provider<NewEntryBloc>.value(
-        value: _newEntryBloc,
-        child: Padding(
-          padding: EdgeInsets.all(2.h),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              const PanelTitle(
-                title: "Nome da Medicação",
-                isRequired: true,
-              ),
-              TextFormField(
-                maxLength: 36,
-                controller: nameController,
-                textCapitalization: TextCapitalization.words,
-                decoration: const InputDecoration(
-                  border: UnderlineInputBorder(),
-                ),
-                style: Theme.of(context)
-                    .textTheme
-                    .titleSmall!
-                    .copyWith(color: pkOtherColor),
-              ),
-              const PanelTitle(
-                title: "Dosagem (mg)",
-                isRequired: false,
-              ),
-              TextFormField(
-                maxLength: 12,
-                controller: dosageController,
-                keyboardType: TextInputType.number,
-                decoration: const InputDecoration(
-                  border: UnderlineInputBorder(),
-                ),
-                style: Theme.of(context)
-                    .textTheme
-                    .titleSmall!
-                    .copyWith(color: pkOtherColor),
-              ),
-              SizedBox(
-                height: 2.h,
-              ),
-              const PanelTitle(title: 'Tipo do Medicamento', isRequired: true),
-              Padding(
-                padding: EdgeInsets.only(top: 1.h),
-                child: StreamBuilder<MedicineType>(
-                  builder: (context, snapshot) {
-                    return Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+    return Consumer4<CreateMedicineController, NewEntryBloc, LoginController, ShowMedicineController>(
+      builder: (context, createMedicineController, _newEntryBloc , loginController,showMedicineController ,child) {
+        return Scaffold(
+          key: _scaffoldKey,
+          resizeToAvoidBottomInset: false,
+          appBar: AppBar(
+            centerTitle: true,
+            title: const Text(
+              "Nova Medicação",
+            ),
+          ),
+          body: SingleChildScrollView(
+            child: Padding(
+              padding: EdgeInsets.all(2.h),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  const PanelTitle(
+                    title: "Nome da Medicação",
+                    isRequired: true,
+                  ),
+                  TextFormField(
+                    maxLength: 36,
+                    controller: nameController,
+                    textCapitalization: TextCapitalization.words,
+                    decoration: const InputDecoration(
+                      border: UnderlineInputBorder(),
+                    ),
+                    style: Theme.of(context)
+                        .textTheme
+                        .titleSmall!
+                        .copyWith(color: pkOtherColor),
+                  ),
+                  const PanelTitle(
+                    title: "Dosagem (mg)",
+                    isRequired: false,
+                  ),
+                  TextFormField(
+                    maxLength: 12,
+                    controller: dosageController,
+                    keyboardType: TextInputType.number,
+                    decoration: const InputDecoration(
+                      border: UnderlineInputBorder(),
+                    ),
+                    style: Theme.of(context)
+                        .textTheme
+                        .titleSmall!
+                        .copyWith(color: pkOtherColor),
+                  ),
+                  SizedBox(
+                    height: 2.h,
+                  ),
+                  const PanelTitle(title: 'Tipo do Medicamento', isRequired: true),
+                  Padding(
+                    padding: EdgeInsets.only(top: 1.h),
+                    child: StreamBuilder<MedicineType>(
+                      builder: (context, snapshot) {
+                        return Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            MedicineTypeColumn(
+                              medicineType: MedicineType.syringe,
+                              name: 'Vacina',
+                              iconValue: 'assets/icons/syringe.svg',
+                              isSelected: snapshot.data == MedicineType.syringe
+                                  ? true
+                                  : false,
+                            ),
+                            MedicineTypeColumn(
+                              medicineType: MedicineType.tablet,
+                              name: 'Pílula',
+                              iconValue: 'assets/icons/tablet.svg',
+                              isSelected: snapshot.data == MedicineType.tablet
+                                  ? true
+                                  : false,
+                            ),
+                            MedicineTypeColumn(
+                              medicineType: MedicineType.pill,
+                              name: 'Cápsula',
+                              iconValue: 'assets/icons/pill.svg',
+                              isSelected:
+                                  snapshot.data == MedicineType.pill ? true : false,
+                            ),
+                            MedicineTypeColumn(
+                              medicineType: MedicineType.bottle,
+                              name: 'Xarope',
+                              iconValue: 'assets/icons/bottle.svg',
+                              isSelected: snapshot.data == MedicineType.bottle
+                                  ? true
+                                  : false,
+                            ),
+                          ],
+                        );
+                      },
+                      stream: _newEntryBloc.selectedModicineType,
+                    ),
+                  ),
+                  SizedBox(
+                    height: 2.h,
+                  ),
+                  const PanelTitle(title: 'Intervalo', isRequired: true),
+                  Padding(
+                    padding: EdgeInsets.only(top: 1.h),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceAround,
                       children: [
-                        MedicineTypeColumn(
-                          medicineType: MedicineType.syringe,
-                          name: 'Vacina',
-                          iconValue: 'assets/icons/syringe.svg',
-                          isSelected: snapshot.data == MedicineType.syringe
-                              ? true
-                              : false,
+                        Text(
+                          'Me lembre a cada',
+                          style: Theme.of(context).textTheme.titleSmall,
                         ),
-                        MedicineTypeColumn(
-                          medicineType: MedicineType.tablet,
-                          name: 'Pílula',
-                          iconValue: 'assets/icons/tablet.svg',
-                          isSelected: snapshot.data == MedicineType.tablet
-                              ? true
-                              : false,
+                        DropdownButton(
+                          iconEnabledColor: pkOtherColor,
+                          dropdownColor: pkScaffordColor,
+                          itemHeight: 8.h,
+                          hint: _selected == 0
+                              ? Text(
+                                  'Selecione',
+                                  style: Theme.of(context).textTheme.bodySmall,
+                                )
+                              : null,
+                          elevation: 4,
+                          value: _selected == 0 ? null : _selected,
+                          items: _intervals.map(
+                            (int value) {
+                              return DropdownMenuItem<int>(
+                                value: value,
+                                child: Text(
+                                  value.toString(),
+                                  style: Theme.of(context)
+                                      .textTheme
+                                      .bodySmall!
+                                      .copyWith(color: pkSecondaryColor),
+                                ),
+                              );
+                            },
+                          ).toList(),
+                          onChanged: (newVal) {
+                            setState(
+                              () {
+                                _selected = newVal!;
+                              },
+                            );
+                          },
                         ),
-                        MedicineTypeColumn(
-                          medicineType: MedicineType.pill,
-                          name: 'Cápsula',
-                          iconValue: 'assets/icons/pill.svg',
-                          isSelected:
-                              snapshot.data == MedicineType.pill ? true : false,
-                        ),
-                        MedicineTypeColumn(
-                          medicineType: MedicineType.bottle,
-                          name: 'Xarope',
-                          iconValue: 'assets/icons/bottle.svg',
-                          isSelected: snapshot.data == MedicineType.bottle
-                              ? true
-                              : false,
-                        ),
+                        Text(
+                          _selected == 1 ? " hora" : " horas",
+                          style: Theme.of(context).textTheme.titleSmall,
+                        )
                       ],
-                    );
-                  },
-                  stream: _newEntryBloc.selectedModicineType,
-                ),
-              ),
-              SizedBox(
-                height: 2.h,
-              ),
-              const PanelTitle(title: 'Intervalo', isRequired: true),
-              const IntervalSelection(),
-              const PanelTitle(title: 'Horario Inicial', isRequired: true),
-              const SelectTime(),
-              SizedBox(
-                height: 2.h,
-              ),
-              Padding(
-                padding: EdgeInsets.only(left: 8.w, right: 8.w),
-                child: SizedBox(
-                  width: 80.w,
-                  height: 8.h,
-                  child: TextButton(
-                    style: TextButton.styleFrom(
-                        backgroundColor: pkPrimaryColor,
-                        shape: const StadiumBorder()),
-                    child: Center(
-                      child: Text(
-                        "Confirmar",
-                        style: Theme.of(context)
-                            .textTheme
-                            .titleSmall!
-                            .copyWith(color: pkScaffordColor),
+                    ),
+                  ),
+                  const PanelTitle(title: 'Horario Inicial', isRequired: true),
+                  const SelectTime(),
+                  SizedBox(
+                    height: 2.h,
+                  ),
+                  Padding(
+                    padding: EdgeInsets.only(left: 8.w, right: 8.w),
+                    child: SizedBox(
+                      width: 80.w,
+                      height: 8.h,
+                      child: TextButton(
+                        style: TextButton.styleFrom(
+                            backgroundColor: pkPrimaryColor,
+                            shape: const StadiumBorder()),
+                        child: Center(
+                          child: Text(
+                            "Confirmar",
+                            style: Theme.of(context)
+                                .textTheme
+                                .titleSmall!
+                                .copyWith(color: pkScaffordColor),
+                          ),
+                        ),
+                        onPressed: () async{
+                          var type = '';
+                          switch (_newEntryBloc.selectedModicineType?.value.toString()) {
+                            case 'MedicineType.syringe':
+                              type = "vacina";
+                              break;
+                            case 'MedicineType.tablet':
+                              type= "cápsula";
+                              break;
+                            case 'MedicineType.pill':
+                              type= "pílula";
+                              break;
+                            default:
+                              type= "xarope";
+                              break;
+                          };
+
+                          await createMedicineController.createMedicine(nameController.text, dosageController.text, _selected.toString(), type,'1', loginController.token.toString());
+
+                          var result = createMedicineController.response;
+
+                          if(result != false){
+                            Navigator.of(context).pushAndRemoveUntil(
+                            MaterialPageRoute(builder: (context) => const PillsPage()),
+                            (Route<dynamic> route) => false);
+                          }
+                        },
                       ),
                     ),
-                    onPressed: () {},
-                  ),
-                ),
-              )
-            ],
+                  )
+                ],
+              ),
+            ),
           ),
-        ),
-      ),
+        );
+      }
     );
   }
 }
@@ -225,72 +310,6 @@ class _SelectTimeState extends State<SelectTime> {
             ),
           ),
         ),
-      ),
-    );
-  }
-}
-
-class IntervalSelection extends StatefulWidget {
-  const IntervalSelection({super.key});
-
-  @override
-  State<IntervalSelection> createState() => _IntervalSelectionState();
-}
-
-class _IntervalSelectionState extends State<IntervalSelection> {
-  final _intervals = [4, 6, 8, 12, 24];
-  var _selected = 0;
-
-  @override
-  Widget build(BuildContext context) {
-    return Padding(
-      padding: EdgeInsets.only(top: 1.h),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceAround,
-        children: [
-          Text(
-            'Me lembre a cada',
-            style: Theme.of(context).textTheme.titleSmall,
-          ),
-          DropdownButton(
-            iconEnabledColor: pkOtherColor,
-            dropdownColor: pkScaffordColor,
-            itemHeight: 8.h,
-            hint: _selected == 0
-                ? Text(
-                    'Selecione',
-                    style: Theme.of(context).textTheme.bodySmall,
-                  )
-                : null,
-            elevation: 4,
-            value: _selected == 0 ? null : _selected,
-            items: _intervals.map(
-              (int value) {
-                return DropdownMenuItem<int>(
-                  value: value,
-                  child: Text(
-                    value.toString(),
-                    style: Theme.of(context)
-                        .textTheme
-                        .bodySmall!
-                        .copyWith(color: pkSecondaryColor),
-                  ),
-                );
-              },
-            ).toList(),
-            onChanged: (newVal) {
-              setState(
-                () {
-                  _selected = newVal!;
-                },
-              );
-            },
-          ),
-          Text(
-            _selected == 1 ? " hora" : " horas",
-            style: Theme.of(context).textTheme.titleSmall,
-          )
-        ],
       ),
     );
   }
