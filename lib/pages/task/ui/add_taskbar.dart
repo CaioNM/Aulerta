@@ -216,11 +216,11 @@ class _AddTaskPageState extends State<AddTaskPage> {
     if (_titleController.text.isEmpty || _noteController.text.isEmpty) {
       Get.snackbar("Obrigatório", "Todos os campos são obrigatórios!",
           snackPosition: SnackPosition.BOTTOM,
-          backgroundColor: Colors.white,
-          colorText: Colors.red,
+          backgroundColor: Colors.red,
+          colorText: Colors.white,
           icon: const Icon(
             Icons.warning_amber_rounded,
-            color: Colors.red,
+            color: Colors.white,
           ));
     } else if (_titleController.text.isNotEmpty &&
         _noteController.text.isNotEmpty) {

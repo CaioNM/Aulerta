@@ -9,6 +9,7 @@ import 'package:aulerta_final/pages/login_&_signup/SignUp/components/social_icon
 import 'package:aulerta_final/utils/rounded_button.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 
@@ -28,88 +29,99 @@ class _BodyState extends State<Body> {
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
-   return Consumer<SignUpController>(
-      builder: (context, signUpController, child) {
-        return Background(
-          child: SingleChildScrollView(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: <Widget>[
-                Text(
-                  "CADASTRE-SE",
-                  style: GoogleFonts.inter(
-                      textStyle: const TextStyle(fontWeight: FontWeight.w700)),
-                ),
-                SizedBox(height: size.height * 0.03),
-                SvgPicture.asset(
-                  "assets/icons/signup.svg",
-                  height: size.height * 0.35,
-                ),
-                RoundedInputField(
-                  hintText: "Insira seu Email",
-                  onChanged: (value) {
-                    setState(() {
-                      _textFieldValueLogin = value;
-                    });
-                  },
-                ),
-                RoundedPassword(
-                  onChanged: (value) {
-                    setState(() {
-                      _textFieldValuePassword = value;
-                    });
-                  },
-                ),
-                RoundedButton(
-                  text: "CADASTRE-SE",
-                  press: () async{
-                      await signUpController.createUser(_textFieldValueLogin, _textFieldValuePassword);
-                      bool result = signUpController.response; 
-                      print(result);
-                      if(result != false) {
-                        Navigator.of(context).pushAndRemoveUntil(
-                          MaterialPageRoute(builder: (context) => const LoginPage()),
-                          (Route<dynamic> route) => false);
-                      }
-                  },
-                ),
-                SizedBox(height: size.height * 0.03),
-                AlreadyHaveAnAccountCheck(
-                  login: false,
-                  press: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) {
-                          return const LoginPage();
-                        },
-                      ),
-                    );
-                  },
-                ),
-                const OrDivider(),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: <Widget>[
-                    SocialIcon(
-                      iconSrc: "assets/icons/google-plus.svg",
-                      press: () {},
+    return Consumer<SignUpController>(
+        builder: (context, signUpController, child) {
+      return Background(
+        child: SingleChildScrollView(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: <Widget>[
+              Text(
+                "CADASTRE-SE",
+                style: GoogleFonts.inter(
+                    textStyle: const TextStyle(fontWeight: FontWeight.w700)),
+              ),
+              SizedBox(height: size.height * 0.03),
+              SvgPicture.asset(
+                "assets/icons/signup.svg",
+                height: size.height * 0.35,
+              ),
+              RoundedInputField(
+                hintText: "Insira seu Email",
+                onChanged: (value) {
+                  setState(() {
+                    _textFieldValueLogin = value;
+                  });
+                },
+              ),
+              RoundedPassword(
+                onChanged: (value) {
+                  setState(() {
+                    _textFieldValuePassword = value;
+                  });
+                },
+              ),
+              RoundedButton(
+                text: "CADASTRE-SE",
+                press: () async {
+                  await signUpController.createUser(
+                      _textFieldValueLogin, _textFieldValuePassword);
+                  bool result = signUpController.response;
+                  print(result);
+                  if (result != false) {
+                    Navigator.of(context).pushAndRemoveUntil(
+                        MaterialPageRoute(
+                            builder: (context) => const LoginPage()),
+                        (Route<dynamic> route) => false);
+                  } else {
+                    Get.snackbar("Erro",
+                          "Erro ao realizar o cadastro. Por favor, tente novamente mais tarde",
+                          snackPosition: SnackPosition.BOTTOM,
+                          backgroundColor: Colors.red,
+                          colorText: Colors.white,
+                          icon: const Icon(
+                            Icons.warning_amber_rounded,
+                            color: Colors.white,
+                          ));
+                  }
+                },
+              ),
+              SizedBox(height: size.height * 0.03),
+              AlreadyHaveAnAccountCheck(
+                login: false,
+                press: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) {
+                        return const LoginPage();
+                      },
                     ),
-                    SocialIcon(
-                      iconSrc: "assets/icons/facebook.svg",
-                      press: () {},
-                    ),
-                    SocialIcon(
-                      iconSrc: "assets/icons/twitter.svg",
-                      press: () {},
-                    ),
-                  ],
-                )
-              ],
-            ),
+                  );
+                },
+              ),
+              const OrDivider(),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: <Widget>[
+                  SocialIcon(
+                    iconSrc: "assets/icons/google-plus.svg",
+                    press: () {},
+                  ),
+                  SocialIcon(
+                    iconSrc: "assets/icons/facebook.svg",
+                    press: () {},
+                  ),
+                  SocialIcon(
+                    iconSrc: "assets/icons/twitter.svg",
+                    press: () {},
+                  ),
+                ],
+              )
+            ],
           ),
-        );
-      }
-    );
+        ),
+      );
+    });
   }
 }

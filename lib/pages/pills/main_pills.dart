@@ -59,7 +59,7 @@ class _PillsState extends State<Pills> {
                 color: pkTextColor,
               ),
               headlineSmall: TextStyle(
-                fontSize: 16.sp,
+                fontSize: 1,
                 fontWeight: FontWeight.w900,
                 color: pkTextColor,
               ),
@@ -117,5 +117,11 @@ class _PillsState extends State<Pills> {
         );
       }),
     );
+  }
+}
+
+extension StringExtension on String {
+  String capitalize() {
+    return "${this[0].toUpperCase()}${this.substring(1).toLowerCase()}";
   }
 }

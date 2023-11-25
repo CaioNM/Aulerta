@@ -1,4 +1,3 @@
-// ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:aulerta_final/controller/Medicine/createMedicineController.dart';
 import 'package:aulerta_final/controller/Medicine/showMedicineController.dart';
 import 'package:aulerta_final/controller/login/login_controller.dart';
@@ -9,7 +8,6 @@ import 'package:aulerta_final/pages/pills/pages/cadastro/new_entry_bloc.dart';
 import 'package:aulerta_final/pages/pills/pages/home.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:get/get.dart';
 import 'package:sizer/sizer.dart';
 import 'package:provider/provider.dart';
 
@@ -48,217 +46,229 @@ class _NewEntryPageState extends State<NewEntryPage> {
 
   @override
   Widget build(BuildContext context) {
-    return Consumer4<CreateMedicineController, NewEntryBloc, LoginController, ShowMedicineController>(
-      builder: (context, createMedicineController, _newEntryBloc , loginController,showMedicineController ,child) {
-        return Scaffold(
-          key: _scaffoldKey,
-          resizeToAvoidBottomInset: false,
-          appBar: AppBar(
-            centerTitle: true,
-            title: const Text(
-              "Nova Medicação",
-            ),
+    return Consumer4<CreateMedicineController, NewEntryBloc, LoginController,
+            ShowMedicineController>(
+        builder: (context, createMedicineController, _newEntryBloc,
+            loginController, showMedicineController, child) {
+      return Scaffold(
+        key: _scaffoldKey,
+        resizeToAvoidBottomInset: false,
+        appBar: AppBar(
+          centerTitle: true,
+          title: const Text(
+            "Nova Medicação",
           ),
-          body: SingleChildScrollView(
-            child: Padding(
-              padding: EdgeInsets.all(2.h),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  const PanelTitle(
-                    title: "Nome da Medicação",
-                    isRequired: true,
+          backgroundColor: pkPrimaryColor,
+        ),
+        body: SingleChildScrollView(
+          child: Padding(
+            padding: EdgeInsets.all(2.h),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                const PanelTitle(
+                  title: "Nome da Medicação",
+                  isRequired: true,
+                ),
+                TextFormField(
+                  maxLength: 36,
+                  controller: nameController,
+                  textCapitalization: TextCapitalization.words,
+                  decoration: const InputDecoration(
+                    border: UnderlineInputBorder(),
                   ),
-                  TextFormField(
-                    maxLength: 36,
-                    controller: nameController,
-                    textCapitalization: TextCapitalization.words,
-                    decoration: const InputDecoration(
-                      border: UnderlineInputBorder(),
-                    ),
-                    style: Theme.of(context)
-                        .textTheme
-                        .titleSmall!
-                        .copyWith(color: pkOtherColor),
+                  style: Theme.of(context)
+                      .textTheme
+                      .titleSmall!
+                      .copyWith(color: pkPrimaryColor),
+                ),
+                const PanelTitle(
+                  title: "Dosagem (mg)",
+                  isRequired: false,
+                ),
+                TextFormField(
+                  maxLength: 12,
+                  controller: dosageController,
+                  keyboardType: TextInputType.number,
+                  decoration: const InputDecoration(
+                    border: UnderlineInputBorder(),
                   ),
-                  const PanelTitle(
-                    title: "Dosagem (mg)",
-                    isRequired: false,
+                  style: Theme.of(context)
+                      .textTheme
+                      .titleSmall!
+                      .copyWith(color: pkPrimaryColor),
+                ),
+                SizedBox(
+                  height: 2.h,
+                ),
+                const PanelTitle(
+                    title: 'Tipo do Medicamento', isRequired: true),
+                Padding(
+                  padding: EdgeInsets.only(top: 1.h),
+                  child: StreamBuilder<MedicineType>(
+                    builder: (context, snapshot) {
+                      return Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          MedicineTypeColumn(
+                            medicineType: MedicineType.syringe,
+                            name: 'Vacina',
+                            iconValue: 'assets/icons/syringe.svg',
+                            isSelected: snapshot.data == MedicineType.syringe
+                                ? true
+                                : false,
+                          ),
+                          MedicineTypeColumn(
+                            medicineType: MedicineType.tablet,
+                            name: 'Pílula',
+                            iconValue: 'assets/icons/tablet.svg',
+                            isSelected: snapshot.data == MedicineType.tablet
+                                ? true
+                                : false,
+                          ),
+                          MedicineTypeColumn(
+                            medicineType: MedicineType.pill,
+                            name: 'Cápsula',
+                            iconValue: 'assets/icons/pill.svg',
+                            isSelected: snapshot.data == MedicineType.pill
+                                ? true
+                                : false,
+                          ),
+                          MedicineTypeColumn(
+                            medicineType: MedicineType.bottle,
+                            name: 'Xarope',
+                            iconValue: 'assets/icons/bottle.svg',
+                            isSelected: snapshot.data == MedicineType.bottle
+                                ? true
+                                : false,
+                          ),
+                        ],
+                      );
+                    },
+                    stream: _newEntryBloc.selectedModicineType,
                   ),
-                  TextFormField(
-                    maxLength: 12,
-                    controller: dosageController,
-                    keyboardType: TextInputType.number,
-                    decoration: const InputDecoration(
-                      border: UnderlineInputBorder(),
-                    ),
-                    style: Theme.of(context)
-                        .textTheme
-                        .titleSmall!
-                        .copyWith(color: pkOtherColor),
-                  ),
-                  SizedBox(
-                    height: 2.h,
-                  ),
-                  const PanelTitle(title: 'Tipo do Medicamento', isRequired: true),
-                  Padding(
-                    padding: EdgeInsets.only(top: 1.h),
-                    child: StreamBuilder<MedicineType>(
-                      builder: (context, snapshot) {
-                        return Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            MedicineTypeColumn(
-                              medicineType: MedicineType.syringe,
-                              name: 'Vacina',
-                              iconValue: 'assets/icons/syringe.svg',
-                              isSelected: snapshot.data == MedicineType.syringe
-                                  ? true
-                                  : false,
-                            ),
-                            MedicineTypeColumn(
-                              medicineType: MedicineType.tablet,
-                              name: 'Pílula',
-                              iconValue: 'assets/icons/tablet.svg',
-                              isSelected: snapshot.data == MedicineType.tablet
-                                  ? true
-                                  : false,
-                            ),
-                            MedicineTypeColumn(
-                              medicineType: MedicineType.pill,
-                              name: 'Cápsula',
-                              iconValue: 'assets/icons/pill.svg',
-                              isSelected:
-                                  snapshot.data == MedicineType.pill ? true : false,
-                            ),
-                            MedicineTypeColumn(
-                              medicineType: MedicineType.bottle,
-                              name: 'Xarope',
-                              iconValue: 'assets/icons/bottle.svg',
-                              isSelected: snapshot.data == MedicineType.bottle
-                                  ? true
-                                  : false,
-                            ),
-                          ],
-                        );
-                      },
-                      stream: _newEntryBloc.selectedModicineType,
-                    ),
-                  ),
-                  SizedBox(
-                    height: 2.h,
-                  ),
-                  const PanelTitle(title: 'Intervalo', isRequired: true),
-                  Padding(
-                    padding: EdgeInsets.only(top: 1.h),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceAround,
-                      children: [
-                        Text(
-                          'Me lembre a cada',
-                          style: Theme.of(context).textTheme.titleSmall,
-                        ),
-                        DropdownButton(
-                          iconEnabledColor: pkOtherColor,
-                          dropdownColor: pkScaffordColor,
-                          itemHeight: 8.h,
-                          hint: _selected == 0
-                              ? Text(
-                                  'Selecione',
-                                  style: Theme.of(context).textTheme.bodySmall,
-                                )
-                              : null,
-                          elevation: 4,
-                          value: _selected == 0 ? null : _selected,
-                          items: _intervals.map(
-                            (int value) {
-                              return DropdownMenuItem<int>(
-                                value: value,
-                                child: Text(
-                                  value.toString(),
-                                  style: Theme.of(context)
-                                      .textTheme
-                                      .bodySmall!
-                                      .copyWith(color: pkSecondaryColor),
-                                ),
-                              );
-                            },
-                          ).toList(),
-                          onChanged: (newVal) {
-                            setState(
-                              () {
-                                _selected = newVal!;
-                              },
+                ),
+                SizedBox(
+                  height: 2.h,
+                ),
+                const PanelTitle(title: 'Intervalo', isRequired: true),
+                Padding(
+                  padding: EdgeInsets.only(top: 1.h),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceAround,
+                    children: [
+                      Text(
+                        'Me lembre a cada',
+                        style: Theme.of(context).textTheme.titleSmall,
+                      ),
+                      DropdownButton(
+                        iconEnabledColor: pkPrimaryColor,
+                        dropdownColor: pkScaffordColor,
+                        itemHeight: 8.h,
+                        hint: _selected == 0
+                            ? Text(
+                                'Selecione',
+                                style: Theme.of(context).textTheme.bodySmall,
+                              )
+                            : null,
+                        elevation: 4,
+                        value: _selected == 0 ? null : _selected,
+                        items: _intervals.map(
+                          (int value) {
+                            return DropdownMenuItem<int>(
+                              value: value,
+                              child: Text(
+                                value.toString(),
+                                style: Theme.of(context)
+                                    .textTheme
+                                    .bodySmall!
+                                    .copyWith(color: pkPrimaryColor),
+                              ),
                             );
                           },
-                        ),
-                        Text(
-                          _selected == 1 ? " hora" : " horas",
-                          style: Theme.of(context).textTheme.titleSmall,
-                        )
-                      ],
-                    ),
-                  ),
-                  const PanelTitle(title: 'Horario Inicial', isRequired: true),
-                  const SelectTime(),
-                  SizedBox(
-                    height: 2.h,
-                  ),
-                  Padding(
-                    padding: EdgeInsets.only(left: 8.w, right: 8.w),
-                    child: SizedBox(
-                      width: 80.w,
-                      height: 8.h,
-                      child: TextButton(
-                        style: TextButton.styleFrom(
-                            backgroundColor: pkPrimaryColor,
-                            shape: const StadiumBorder()),
-                        child: Center(
-                          child: Text(
-                            "Confirmar",
-                            style: Theme.of(context)
-                                .textTheme
-                                .titleSmall!
-                                .copyWith(color: pkScaffordColor),
-                          ),
-                        ),
-                        onPressed: () async{
-                          var type = '';
-                          switch (_newEntryBloc.selectedModicineType?.value.toString()) {
-                            case 'MedicineType.syringe':
-                              type = "vacina";
-                              break;
-                            case 'MedicineType.tablet':
-                              type= "cápsula";
-                              break;
-                            case 'MedicineType.pill':
-                              type= "pílula";
-                              break;
-                            default:
-                              type= "xarope";
-                              break;
-                          };
-
-                          await createMedicineController.createMedicine(nameController.text, dosageController.text, _selected.toString(), type,'1', loginController.token.toString());
-
-                          var result = createMedicineController.response;
-
-                          if(result != false){
-                            Navigator.of(context).pushAndRemoveUntil(
-                            MaterialPageRoute(builder: (context) => const PillsPage()),
-                            (Route<dynamic> route) => false);
-                          }
+                        ).toList(),
+                        onChanged: (newVal) {
+                          setState(
+                            () {
+                              _selected = newVal!;
+                            },
+                          );
                         },
                       ),
+                      Text(
+                        _selected == 1 ? " hora" : " horas",
+                        style: Theme.of(context).textTheme.titleSmall,
+                      )
+                    ],
+                  ),
+                ),
+                //const PanelTitle(title: 'Horario Inicial', isRequired: true),
+                //const SelectTime(),
+                SizedBox(
+                  height: 8.h,
+                ),
+                Padding(
+                  padding: EdgeInsets.only(left: 8.w, right: 8.w),
+                  child: SizedBox(
+                    width: 80.w,
+                    height: 8.h,
+                    child: TextButton(
+                      style: TextButton.styleFrom(
+                          backgroundColor: pkPrimaryColor,
+                          shape: const StadiumBorder()),
+                      child: Center(
+                        child: Text(
+                          "Confirmar",
+                          style: Theme.of(context)
+                              .textTheme
+                              .titleSmall!
+                              .copyWith(color: pkScaffordColor),
+                        ),
+                      ),
+                      onPressed: () async {
+                        var type = '';
+                        switch (_newEntryBloc.selectedModicineType?.value
+                            .toString()) {
+                          case 'MedicineType.syringe':
+                            type = "vacina";
+                            break;
+                          case 'MedicineType.tablet':
+                            type = "cápsula";
+                            break;
+                          case 'MedicineType.pill':
+                            type = "pílula";
+                            break;
+                          default:
+                            type = "xarope";
+                            break;
+                        }
+
+                        await createMedicineController.createMedicine(
+                            nameController.text,
+                            dosageController.text,
+                            _selected.toString(),
+                            type,
+                            '1',
+                            loginController.token.toString());
+
+                        var result = createMedicineController.response;
+
+                        if (result != false) {
+                          Navigator.of(context).pushAndRemoveUntil(
+                              MaterialPageRoute(
+                                  builder: (context) => const PillsPage()),
+                              (Route<dynamic> route) => false);
+                        }
+                      },
                     ),
-                  )
-                ],
-              ),
+                  ),
+                )
+              ],
             ),
           ),
-        );
-      }
-    );
+        ),
+      );
+    });
   }
 }
 
@@ -343,7 +353,7 @@ class MedicineTypeColumn extends StatelessWidget {
             alignment: Alignment.center,
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(3.h),
-              color: isSelected ? pkOtherColor : Colors.white,
+              color: isSelected ? pkPrimaryColor : Colors.white,
             ),
             child: Center(
               child: Padding(
@@ -354,7 +364,7 @@ class MedicineTypeColumn extends StatelessWidget {
                 child: SvgPicture.asset(
                   iconValue,
                   height: 7.h,
-                  color: isSelected ? Colors.white : pkOtherColor,
+                  color: isSelected ? Colors.white : pkPrimaryColor,
                 ),
               ),
             ),
@@ -365,14 +375,14 @@ class MedicineTypeColumn extends StatelessWidget {
               width: 20.w,
               height: 4.h,
               decoration: BoxDecoration(
-                color: isSelected ? pkOtherColor : Colors.transparent,
+                color: isSelected ? pkPrimaryColor : Colors.transparent,
                 borderRadius: BorderRadius.circular(20),
               ),
               child: Center(
                 child: Text(
                   name,
                   style: Theme.of(context).textTheme.titleSmall!.copyWith(
-                      color: isSelected ? Colors.white : pkOtherColor),
+                      color: isSelected ? Colors.white : pkPrimaryColor),
                 ),
               ),
             ),
