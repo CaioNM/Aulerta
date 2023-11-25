@@ -1,4 +1,5 @@
 import 'package:aulerta_final/pages/home.dart';
+import 'package:aulerta_final/pages/pills/pages/home.dart';
 import 'package:aulerta_final/pages/task/controllers/task_controller.dart';
 import 'package:aulerta_final/pages/task/models/task.dart';
 import 'package:aulerta_final/pages/task/ui/add_taskbar.dart';
@@ -96,6 +97,38 @@ class _HomePageState extends State<TasksPage> {
           setState(() {
             _currentIndex = index;
           });
+          if (index == 0) {
+            // Navegue para a tela Home
+            Navigator.pushReplacement(
+              context,
+              PageRouteBuilder(
+                pageBuilder: (context, animation1, animation2) =>
+                    const HomePage(),
+                transitionDuration: Duration.zero,
+                reverseTransitionDuration: Duration.zero,
+              ),
+            );
+          } else if (index == 1) {
+            Navigator.pushReplacement(
+              context,
+              PageRouteBuilder(
+                pageBuilder: (context, animation1, animation2) =>
+                    const PillsPage(),
+                transitionDuration: Duration.zero,
+                reverseTransitionDuration: Duration.zero,
+              ),
+            );
+          } else if (index == 2) {
+            Navigator.pushReplacement(
+              context,
+              PageRouteBuilder(
+                pageBuilder: (context, animation1, animation2) =>
+                    const TasksPage(),
+                transitionDuration: Duration.zero,
+                reverseTransitionDuration: Duration.zero,
+              ),
+            );
+          }
         },
       ),
     );

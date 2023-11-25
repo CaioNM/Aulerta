@@ -7,6 +7,7 @@ import 'package:aulerta_final/pages/pills/constants.dart';
 import 'package:aulerta_final/pages/pills/main_pills.dart';
 import 'package:aulerta_final/pages/pills/pages/cadastro/new_entry.dart';
 import 'package:aulerta_final/pages/pills/pages/medicine_detais.dart';
+import 'package:aulerta_final/pages/task/ui/home.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:provider/provider.dart';
@@ -122,6 +123,38 @@ class _PillsPageState extends State<PillsPage> {
             setState(() {
               _currentIndex = index;
             });
+            if (index == 0) {
+              // Navegue para a tela Home
+              Navigator.pushReplacement(
+                context,
+                PageRouteBuilder(
+                  pageBuilder: (context, animation1, animation2) =>
+                      const HomePage(),
+                  transitionDuration: Duration.zero,
+                  reverseTransitionDuration: Duration.zero,
+                ),
+              );
+            } else if (index == 1) {
+              Navigator.pushReplacement(
+                context,
+                PageRouteBuilder(
+                  pageBuilder: (context, animation1, animation2) =>
+                      const PillsPage(),
+                  transitionDuration: Duration.zero,
+                  reverseTransitionDuration: Duration.zero,
+                ),
+              );
+            } else if (index == 2) {
+              Navigator.pushReplacement(
+                context,
+                PageRouteBuilder(
+                  pageBuilder: (context, animation1, animation2) =>
+                      const TasksPage(),
+                  transitionDuration: Duration.zero,
+                  reverseTransitionDuration: Duration.zero,
+                ),
+              );
+            }
           },
         ),
       );
