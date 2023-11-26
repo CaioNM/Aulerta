@@ -217,8 +217,6 @@ class _HomePageState extends State<HomePage> {
                       ),
                       InkWell(
                         onTap: () {
-                          // Adicione o código que deseja executar quando o ícone for clicado
-                          // Por exemplo, pode ser uma navegação para outra tela.
                           Navigator.of(context).pushAndRemoveUntil(
                               MaterialPageRoute(
                                   builder: (context) => const TasksPage()),

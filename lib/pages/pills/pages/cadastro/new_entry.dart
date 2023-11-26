@@ -8,6 +8,7 @@ import 'package:aulerta_final/pages/pills/pages/cadastro/new_entry_bloc.dart';
 import 'package:aulerta_final/pages/pills/pages/home.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:get/get.dart';
 import 'package:sizer/sizer.dart';
 import 'package:provider/provider.dart';
 
@@ -202,8 +203,6 @@ class _NewEntryPageState extends State<NewEntryPage> {
                     ],
                   ),
                 ),
-                //const PanelTitle(title: 'Horario Inicial', isRequired: true),
-                //const SelectTime(),
                 SizedBox(
                   height: 8.h,
                 ),
@@ -258,6 +257,16 @@ class _NewEntryPageState extends State<NewEntryPage> {
                               MaterialPageRoute(
                                   builder: (context) => const PillsPage()),
                               (Route<dynamic> route) => false);
+                        } else {
+                          Get.snackbar("Erro",
+                              "Ops! Algo deu errado. Por favor, tente novamente.",
+                              snackPosition: SnackPosition.BOTTOM,
+                              backgroundColor: Colors.red,
+                              colorText: Colors.white,
+                              icon: const Icon(
+                                Icons.warning_amber_rounded,
+                                color: Colors.white,
+                              ));
                         }
                       },
                     ),

@@ -1,11 +1,10 @@
-// ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:aulerta_final/controller/Medicine/deleteMedicineController.dart';
 import 'package:aulerta_final/controller/login/login_controller.dart';
 import 'package:aulerta_final/pages/pills/constants.dart';
-import 'package:aulerta_final/pages/pills/main_pills.dart';
 import 'package:aulerta_final/pages/pills/pages/home.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:get/get.dart';
 import 'package:provider/provider.dart';
 import 'package:sizer/sizer.dart';
 
@@ -75,6 +74,16 @@ class _MedicineDetailsState extends State<MedicineDetails> {
                           MaterialPageRoute(
                               builder: (context) => const PillsPage()),
                           (Route<dynamic> route) => false);
+                    } else {
+                      Get.snackbar("Erro",
+                          "Ops! Algo deu errado. Por favor, tente novamente.",
+                          snackPosition: SnackPosition.BOTTOM,
+                          backgroundColor: Colors.red,
+                          colorText: Colors.white,
+                          icon: const Icon(
+                            Icons.warning_amber_rounded,
+                            color: Colors.white,
+                          ));
                     }
                   },
                   style: TextButton.styleFrom(
@@ -142,7 +151,7 @@ class _MainSectionState extends State<MainSection> {
           children: [
             MainInfoTab(
               fieldTitle: "Nome:",
-              fieldInfo: widget.name.toString().capitalize(),
+              fieldInfo: widget.name.toString().capitalize!,
             ),
             MainInfoTab(
               fieldTitle: "Dosagem (mg):",
@@ -260,7 +269,7 @@ class _ExtendedSectionState extends State<ExtendedSection> {
       children: [
         ExtendedInfoTab(
           fieldTitle: 'Tipo do Medicamento:',
-          fieldInfo: widget.type.toString().capitalize(),
+          fieldInfo: widget.type.toString().capitalize!,
         ),
         ExtendedInfoTab(
           fieldTitle: 'Intervalo:',
