@@ -6,7 +6,7 @@ import 'package:aulerta_final/pages/login_&_signup/Login/components/background.d
 import 'package:aulerta_final/pages/login_&_signup/Login/components/input_field.dart';
 import 'package:aulerta_final/pages/login_&_signup/Login/components/password_field.dart';
 import 'package:aulerta_final/pages/login_&_signup/SignUp/signup.dart';
-import 'package:aulerta_final/utils/rounded_button.dart';
+import 'package:aulerta_final/pages/pills/constants.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
@@ -26,6 +26,8 @@ class _BodyState extends State<Body> {
   String _textFieldValueLogin = '';
 
   String _textFieldValuePassword = '';
+
+  bool isLoading = false;
 
   @override
   Widget build(BuildContext context) {
@@ -66,9 +68,26 @@ class _BodyState extends State<Body> {
                   });
                 },
               ),
-              RoundedButton(
-                  text: "LOGIN",
-                  press: () async {
+              const SizedBox(
+                height: 20,
+              ),
+              SizedBox(
+                height: 60,
+                width: 0.8 * MediaQuery.of(context).size.width,
+                child: ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                    padding: const EdgeInsets.all(16.0),
+                    backgroundColor: pkPrimaryColor,
+                    minimumSize:
+                        Size(0.8 * MediaQuery.of(context).size.width, 0),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(40.0),
+                    ), // Use a cor desejada
+                  ),
+                  onPressed: () async {
+                    setState(() {
+                      isLoading = true;
+                    });
                     await loginController.getUserData(
                         _textFieldValueLogin, _textFieldValuePassword);
                     login_model? loginModel = loginController.loginModel;
@@ -77,7 +96,13 @@ class _BodyState extends State<Body> {
                           MaterialPageRoute(
                               builder: (context) => const HomePage()),
                           (Route<dynamic> route) => false);
+                      setState(() {
+                        isLoading = false;
+                      });
                     } else {
+                      setState(() {
+                        isLoading = false;
+                      });
                       Get.snackbar("Erro",
                           "E-mail e/ou Senha inválidos. Tente novamente.",
                           snackPosition: SnackPosition.BOTTOM,
@@ -88,7 +113,23 @@ class _BodyState extends State<Body> {
                             color: Colors.white,
                           ));
                     }
-                  }),
+                  },
+                  child: isLoading
+                      ? const Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            SizedBox(
+                              width: 24 * 0.9,
+                              height: 24 * 0.9,
+                              child: CircularProgressIndicator(
+                                color: Colors.white,
+                              ),
+                            ),
+                          ],
+                        )
+                      : const Text("LOGIN"),
+                ),
+              ),
               SizedBox(height: size.height * 0.03),
               AlreadyHaveAnAccountCheck(
                 press: () {

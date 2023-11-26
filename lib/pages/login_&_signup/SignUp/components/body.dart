@@ -6,7 +6,7 @@ import 'package:aulerta_final/pages/login_&_signup/Login/components/password_fie
 import 'package:aulerta_final/pages/login_&_signup/Login/login.dart';
 import 'package:aulerta_final/pages/login_&_signup/SignUp/components/or_divider.dart';
 import 'package:aulerta_final/pages/login_&_signup/SignUp/components/social_icon.dart';
-import 'package:aulerta_final/utils/rounded_button.dart';
+import 'package:aulerta_final/pages/pills/constants.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
@@ -25,6 +25,8 @@ class _BodyState extends State<Body> {
   String _textFieldValueLogin = '';
 
   String _textFieldValuePassword = '';
+
+  bool isLoading = false;
 
   @override
   Widget build(BuildContext context) {
@@ -61,20 +63,37 @@ class _BodyState extends State<Body> {
                   });
                 },
               ),
-              RoundedButton(
-                text: "CADASTRE-SE",
-                press: () async {
-                  await signUpController.createUser(
-                      _textFieldValueLogin, _textFieldValuePassword);
-                  bool result = signUpController.response;
-                  print(result);
-                  if (result != false) {
-                    Navigator.of(context).pushAndRemoveUntil(
-                        MaterialPageRoute(
-                            builder: (context) => const LoginPage()),
-                        (Route<dynamic> route) => false);
-                  } else {
-                    Get.snackbar("Erro",
+              const SizedBox(
+                height: 20,
+              ),
+              SizedBox(
+                height: 60,
+                width: 0.8 * MediaQuery.of(context).size.width,
+                child: ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                    padding: const EdgeInsets.all(16.0),
+                    backgroundColor: pkPrimaryColor,
+                    minimumSize:
+                        Size(0.8 * MediaQuery.of(context).size.width, 0),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(40.0),
+                    ), // Use a cor desejada
+                  ),
+                  onPressed: () async {
+                    setState(() {
+                      isLoading = true;
+                    });
+                    await signUpController.createUser(
+                        _textFieldValueLogin, _textFieldValuePassword);
+                    bool result = signUpController.response;
+                    print(result);
+                    if (result != false) {
+                      Navigator.of(context).pushAndRemoveUntil(
+                          MaterialPageRoute(
+                              builder: (context) => const LoginPage()),
+                          (Route<dynamic> route) => false);
+                    } else {
+                      Get.snackbar("Erro",
                           "Erro ao realizar o cadastro. Por favor, tente novamente mais tarde",
                           snackPosition: SnackPosition.BOTTOM,
                           backgroundColor: Colors.red,
@@ -83,8 +102,23 @@ class _BodyState extends State<Body> {
                             Icons.warning_amber_rounded,
                             color: Colors.white,
                           ));
-                  }
-                },
+                    }
+                  },
+                  child: isLoading
+                      ? const Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            SizedBox(
+                              width: 24 * 0.9,
+                              height: 24 * 0.9,
+                              child: CircularProgressIndicator(
+                                color: Colors.white,
+                              ),
+                            ),
+                          ],
+                        )
+                      : const Text("CADASTRE-SE"),
+                ),
               ),
               SizedBox(height: size.height * 0.03),
               AlreadyHaveAnAccountCheck(

@@ -145,7 +145,7 @@ class _MainSectionState extends State<MainSection> {
               fieldInfo: widget.name.toString().capitalize(),
             ),
             MainInfoTab(
-              fieldTitle: "Dosagem:",
+              fieldTitle: "Dosagem (mg):",
               fieldInfo: widget.dose.toString(),
             )
           ],

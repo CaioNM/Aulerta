@@ -1,5 +1,7 @@
 import 'package:aulerta_final/constant.dart';
+import 'package:aulerta_final/pages/login_&_signup/Login/login.dart';
 import 'package:aulerta_final/pages/onboarding_&_home/default_widget.dart';
+import 'package:aulerta_final/pages/pills/constants.dart';
 import 'package:aulerta_final/pages/pills/pages/home.dart';
 import 'package:aulerta_final/pages/task/controllers/task_controller.dart';
 import 'package:aulerta_final/pages/task/models/task.dart';
@@ -26,26 +28,41 @@ class _HomePageState extends State<HomePage> {
       body: CustomScrollView(
         slivers: [
           SliverAppBar(
-            backgroundColor: Colors.white,
-            centerTitle: false,
-            title: RichText(
-              text: const TextSpan(
-                children: [
-                  TextSpan(
-                    text: 'Bem-Vindo(a)',
-                    style: TextStyle(
-                      fontSize: 20,
-                      fontWeight: FontWeight.bold,
+              backgroundColor: Colors.white,
+              centerTitle: false,
+              title: RichText(
+                text: const TextSpan(
+                  children: [
+                    TextSpan(
+                      text: 'Bem-Vindo(a)',
+                      style: TextStyle(
+                        fontSize: 20,
+                        fontWeight: FontWeight.bold,
+                      ),
                     ),
+                  ],
+                  style: TextStyle(
+                    fontSize: 20,
+                    color: Colors.black87,
                   ),
-                ],
-                style: TextStyle(
-                  fontSize: 20,
-                  color: Colors.black87,
                 ),
               ),
-            ),
-          ),
+              actions: [
+                Padding(
+                    padding: const EdgeInsets.only(right: 12.0),
+                    child: IconButton(
+                      icon: const Icon(
+                        Icons.logout,
+                        color: primaryColor,
+                      ),
+                      onPressed: () {
+                        Navigator.of(context).pushAndRemoveUntil(
+                            MaterialPageRoute(
+                                builder: (context) => const LoginPage()),
+                            (Route<dynamic> route) => false);
+                      },
+                    ))
+              ]),
           sliverList(
             child: Container(
               padding: const EdgeInsets.symmetric(
@@ -208,9 +225,9 @@ class _HomePageState extends State<HomePage> {
                               (Route<dynamic> route) => false);
                         },
                         child: const Icon(
-                          Icons
-                              .add, // Substitua "Icons.star" pelo ícone desejado
+                          Icons.add,
                           size: 30.0,
+                          color: primaryColor,
                         ),
                       ),
                     ],
@@ -330,7 +347,8 @@ class DrListContainer extends StatelessWidget {
               color: primaryColor,
               borderRadius: BorderRadius.circular(20),
               image: const DecorationImage(
-                image: AssetImage('assets/dr.png'), // change in future
+                image:
+                    AssetImage('assets/aulerta-logo.png'), // change in future
                 fit: BoxFit.cover,
               ),
             ),
